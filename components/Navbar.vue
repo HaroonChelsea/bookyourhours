@@ -9,7 +9,7 @@
         <div class="left-side">
           <!-- Logo -->
           <div id="logo">
-            <a href="index.html"><img src="images/logo.png" alt="" /></a>
+            <NuxtLink to="/"><img src="images/logo.png" alt=""/></NuxtLink>
           </div>
 
           <!-- Main Navigation -->
@@ -221,6 +221,12 @@
                   <li><a href="pages-contact.html">Contact</a></li>
                 </ul>
               </li>
+              <li>
+                <NuxtLink to="/signin">Sign in</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to="/register">Register</NuxtLink>
+              </li>
             </ul>
           </nav>
           <div class="clearfix" />
@@ -254,7 +260,7 @@
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style></style>

@@ -1,7 +1,3 @@
 <template>
-  <Navbar />
+  <Header />
 </template>
-
-<script>
-export default {}
-</script>
