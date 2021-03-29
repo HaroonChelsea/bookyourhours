@@ -1,7 +1,5 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
-
-  target: "static",
   head: {
     title: "bookyourhours",
     htmlAttrs: {
@@ -96,8 +94,35 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: "https://bookyourhours.herokuapp.com/v1"
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {}
+  build: {},
+
+  // Nuxt auth
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: "tokens",
+          required: true,
+          type: "Bearer"
+        },
+        user: {
+          property: "user"
+          // autoFetch: true
+        },
+        endpoints: {
+          login: {
+            url: "/auth/login",
+            method: "post"
+          },
+          logout: false,
+          user: false
+        }
+      }
+    }
+  }
 };
