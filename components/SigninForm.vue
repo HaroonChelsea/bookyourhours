@@ -3,7 +3,7 @@
     <!-- Welcome Text -->
     <div class="welcome-text">
       <h3>We're glad to see you again!</h3>
-      <span
+      <span v-if="$route.name === 'signin'"
         >Don't have an account?
         <NuxtLink to="/register">Sign Up!</NuxtLink></span
       >
@@ -76,8 +76,8 @@
         <i class="icon-brand-google-plus-g"></i> Log In via Google+
       </button>
     </div>
-  </div></template
->
+  </div>
+</template>
 
 <script>
 export default {
@@ -104,7 +104,6 @@ export default {
   },
   methods: {
     async userLogin() {
-      console.log(this.$route.name);
       if (this.validateForm()) {
         try {
           this.isLoading = true;

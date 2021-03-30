@@ -3,9 +3,9 @@
     <!-- Welcome Text -->
     <div class="welcome-text">
       <h3 style="font-size: 26px;">Let's create your account!</h3>
-      <span
+      <span v-if="$route.name === 'register'"
         >Already have an account?
-        <NuxtLink to="/signin">Log In!</NuxtLink></span
+        <NuxtLink to="/signin">Log in!</NuxtLink></span
       >
     </div>
 
@@ -192,12 +192,15 @@ export default {
       if (this.validateForm()) {
         try {
           this.isLoading = true;
-          await this.$axios.$post("/auth/register", {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-            phoneNumber: this.phone
-          });
+          await this.$axios.$post(
+            "https://bookyourhours.herokuapp.com/v1/auth/register",
+            {
+              name: this.name,
+              email: this.email,
+              password: this.password,
+              phoneNumber: this.phone
+            }
+          );
 
           await this.$auth
             .loginWith("local", {
@@ -216,7 +219,6 @@ export default {
               this.$auth.$storage.setUniversal("user", data.user, true);
               this.$auth.$storage.setUniversal("tokens", data.tokens, true);
               this.isLoading = false;
-              this.$router.push("/");
             });
           this.$router.push("/");
         } catch (e) {

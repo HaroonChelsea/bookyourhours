@@ -67,6 +67,10 @@ export default {
       {
         src: "/js/custom.js",
         body: true
+      },
+      {
+        src: "/js/custom2.js",
+        body: true
       }
     ]
   },
@@ -94,12 +98,12 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    baseURL: "https://bookyourhours.herokuapp.com/v1"
-  },
+  axios: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    standalone: true
+  },
 
   // Nuxt auth
   auth: {
@@ -110,13 +114,9 @@ export default {
           required: true,
           type: "Bearer"
         },
-        user: {
-          property: "user"
-          // autoFetch: true
-        },
         endpoints: {
           login: {
-            url: "/auth/login",
+            url: "https://bookyourhours.herokuapp.com/v1/auth/login",
             method: "post"
           },
           logout: false,

@@ -327,7 +327,7 @@ export default {
     async logout() {
       await this.$auth.logout();
       await this.$axios
-        .$post("/auth/logout", {
+        .$post("https://bookyourhours.herokuapp.com/v1/auth/logout", {
           refreshToken: this.$auth.$storage.getUniversal("tokens").refresh.token
         })
         .then(() => {
