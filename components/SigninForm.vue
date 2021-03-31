@@ -103,34 +103,23 @@ export default {
     };
   },
   methods: {
-    async userLogin() {
+    userLogin() {
       if (this.validateForm()) {
-        try {
-          this.isLoading = true;
-          await this.$auth
-            .loginWith("local", {
-              data: {
-                email: this.email,
-                password: this.password
-              }
-            })
-            .then(res => {
-              const data = res.data;
-              this.$auth.setUser(data.user);
-              this.$auth.setUserToken(
-                data.tokens.access.token,
-                data.tokens.refresh.token
-              );
-              this.$auth.$storage.setUniversal("user", data.user, true);
-              this.$auth.$storage.setUniversal("tokens", data.tokens, true);
-              this.$router.push("/");
-            });
-          this.isLoading = false;
-        } catch (e) {
-          this.error.response.status = true;
-          this.error.response.message = e.response.data.message;
-          this.isLoading = false;
-        }
+        this.isLoading = true;
+        this.$store
+          .dispatch("loginUser", {
+            email: this.email,
+            password: this.password
+          })
+          .then(() => {
+            this.isLoading = false;
+            this.$router.push("/signin");
+          })
+          .catch(err => {
+            this.error.response.status = true;
+            this.error.response.message = err.response.data.message;
+            this.isLoading = false;
+          });
       }
     },
     validateForm() {

@@ -9,18 +9,18 @@
     <!--Tabs -->
     <div class="sign-in-form">
       <ul class="popup-tabs-nav">
-        <li><a href="#loginForm">Log In</a></li>
-        <li><a href="#registerForm">Register</a></li>
+        <li><a href="#login">Log In</a></li>
+        <li><a href="#register">Register</a></li>
       </ul>
 
       <div class="popup-tabs-container">
         <!-- Login -->
-        <div id="loginForm" class="popup-tab-content">
+        <div id="login" class="popup-tab-content">
           <SigninForm />
         </div>
 
         <!-- Register -->
-        <div id="registerForm" class="popup-tab-content">
+        <div id="register" class="popup-tab-content">
           <RegisterForm />
         </div>
       </div>

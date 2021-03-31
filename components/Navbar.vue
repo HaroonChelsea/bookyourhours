@@ -42,7 +42,7 @@
         <!-- Left Side Content / End -->
 
         <!-- Right Side Content / End -->
-        <div v-if="$auth.user" class="right-side">
+        <div class="right-side">
           <!--  User Notifications -->
           <div class="header-widget hide-on-mobile">
             <!-- Notifications -->
@@ -242,7 +242,7 @@
                       <img src="images/user-avatar-small-01.jpg" alt="" />
                     </div>
                     <div class="user-name">
-                      {{ $auth.$storage.getUniversal("user").name }}
+                      Name
                       <span>Freelancer</span>
                     </div>
                   </div>
@@ -270,7 +270,7 @@
                     >
                   </li>
                   <li>
-                    <a @click="logout">
+                    <a>
                       <i class="icon-material-outline-power-settings-new"></i>
                       Logout
                     </a>
@@ -294,11 +294,14 @@
 
         <!-- Right Side Content / End -->
         <div
-          v-else-if="$route.name !== 'signin' && $route.name !== 'register'"
+          v-if="$route.name !== 'signin' && $route.name !== 'register'"
           class="right-side"
         >
           <div class="header-widget">
-            <a href="#sign-in-dialog" class="popup-with-zoom-anim log-in-button"
+            <a
+              ref="signInDialog"
+              href="#sign-in-dialog"
+              class="popup-with-zoom-anim log-in-button"
               ><i class="icon-feather-log-in" />
               <span>Log In / Register</span></a
             >
@@ -320,24 +323,3 @@
     <!-- Header / End -->
   </header>
 </template>
-
-<script>
-export default {
-  methods: {
-    async logout() {
-      await this.$auth.logout();
-      await this.$axios
-        .$post("https://bookyourhours.herokuapp.com/v1/auth/logout", {
-          refreshToken: this.$auth.$storage.getUniversal("tokens").refresh.token
-        })
-        .then(() => {
-          this.$auth.$storage.removeUniversal("user");
-          this.$auth.$storage.removeUniversal("tokens");
-        });
-      this.$router.push("/signin");
-    }
-  }
-};
-</script>
-
-<style></style>
