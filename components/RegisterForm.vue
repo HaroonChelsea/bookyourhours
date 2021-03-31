@@ -52,7 +52,7 @@
       <div class="input-with-icon-left">
         <i class="icon-feather-user"></i>
         <input
-          v-model="name"
+          v-model.trim="name"
           type="text"
           class="input-text with-border"
           placeholder="Full name"
@@ -65,7 +65,7 @@
         <i class="icon-material-baseline-mail-outline"></i>
         <input
           id="emailaddress-register"
-          v-model="email"
+          v-model.trim="email"
           type="email"
           class="input-text with-border"
           name="emailaddress-register"
@@ -78,7 +78,7 @@
       <div class="input-with-icon-left">
         <i class="icon-line-awesome-phone-square"></i>
         <input
-          v-model="phone"
+          v-model.trim="phone"
           type="tel"
           class="input-text with-border"
           placeholder="Phone Number (xxx xxx xxxx)"
@@ -95,7 +95,7 @@
         <i class="icon-material-outline-lock"></i>
         <input
           id="password-register"
-          v-model="password"
+          v-model.trim="password"
           type="password"
           class="input-text with-border"
           name="password-register"
@@ -109,7 +109,7 @@
         <i class="icon-material-outline-lock"></i>
         <input
           id="password-repeat-register"
-          v-model="passwordConfirm"
+          v-model.trim="passwordConfirm"
           type="password"
           class="input-text with-border"
           name="password-repeat-register"
@@ -150,15 +150,17 @@
 </template>
 
 <script>
+import $ from "jquery";
+
 export default {
   data() {
     return {
       isLoading: false,
-      name: null,
-      email: null,
-      phone: null,
-      password: null,
-      passwordConfirm: null,
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      passwordConfirm: "",
       error: {
         name: {
           status: false,
@@ -188,25 +190,49 @@ export default {
     };
   },
   methods: {
-    userRegister() {
+    async userRegister() {
       if (this.validateForm()) {
-        this.isLoading = true;
-        this.$store
-          .dispatch("registerUser", {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-            phoneNumber: this.phone
-          })
-          .then(() => {
-            this.isLoading = false;
-            this.$router.push("/register");
-          })
-          .catch(err => {
-            this.error.response.status = true;
-            this.error.response.message = err.response.data.message;
-            this.isLoading = false;
-          });
+        try {
+          this.isLoading = true;
+          await this.$axios.$post(
+            "https://bookyourhours.herokuapp.com/v1/auth/register",
+            {
+              name: this.name,
+              email: this.email,
+              password: this.password,
+              phoneNumber: this.phone
+            }
+          );
+          await this.$auth
+            .loginWith("local", {
+              data: {
+                email: this.email,
+                password: this.password
+              }
+            })
+            .then(res => {
+              const data = res.data;
+              this.$auth.setUser(data.user);
+              this.$auth.setUserToken(
+                data.tokens.access.token,
+                data.tokens.refresh.token
+              );
+              this.$auth.$storage.setUniversal("user", data.user, true);
+              this.$auth.$storage.setUniversal("tokens", data.tokens, true);
+              this.isLoading = false;
+            });
+          this.name = "";
+          this.email = "";
+          this.password = "";
+          this.phone = "";
+          this.isLoading = false;
+          $(".mfp-close").click();
+          this.$router.push("/dashboard");
+        } catch (e) {
+          this.error.response.status = true;
+          this.error.response.message = e.response.data.message;
+          this.isLoading = false;
+        }
       }
     },
     validateForm() {

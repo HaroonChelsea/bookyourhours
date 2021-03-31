@@ -1,11 +1,7 @@
 <template>
   <!-- Sign In Popup
 ================================================== -->
-  <div
-    v-if="!($route.name === 'register' || $route.name === 'signin')"
-    id="sign-in-dialog"
-    class="zoom-anim-dialog mfp-hide dialog-with-tabs"
-  >
+  <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
     <!--Tabs -->
     <div class="sign-in-form">
       <ul class="popup-tabs-nav">

@@ -69,6 +69,10 @@ export default {
         body: true
       },
       {
+        src: "js/chart.min.js",
+        body: true
+      },
+      {
         src: "/js/custom2.js",
         body: true
       }
@@ -93,7 +97,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+    "@nuxtjs/auth-next"
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -102,5 +107,24 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     standalone: true
+  },
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: "tokens",
+          required: true,
+          type: "Bearer"
+        },
+        endpoints: {
+          login: {
+            url: "https://bookyourhours.herokuapp.com/v1/auth/login",
+            method: "post"
+          },
+          logout: false,
+          user: false
+        }
+      }
+    }
   }
 };

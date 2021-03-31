@@ -25,7 +25,7 @@
         <i class="icon-material-baseline-mail-outline"></i>
         <input
           id="emailaddress"
-          v-model="email"
+          v-model.trim="email"
           type="email"
           class="input-text with-border"
           placeholder="Email Address"
@@ -39,7 +39,7 @@
         <i class="icon-material-outline-lock"></i>
         <input
           id="password"
-          v-model="password"
+          v-model.trim="password"
           type="password"
           class="input-text with-border"
           name="password"
@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import $ from "jquery";
+
 export default {
   data() {
     return {
@@ -103,23 +105,37 @@ export default {
     };
   },
   methods: {
-    userLogin() {
+    async userLogin() {
       if (this.validateForm()) {
-        this.isLoading = true;
-        this.$store
-          .dispatch("loginUser", {
-            email: this.email,
-            password: this.password
-          })
-          .then(() => {
-            this.isLoading = false;
-            this.$router.push("/signin");
-          })
-          .catch(err => {
-            this.error.response.status = true;
-            this.error.response.message = err.response.data.message;
-            this.isLoading = false;
-          });
+        try {
+          this.isLoading = true;
+          await this.$auth
+            .loginWith("local", {
+              data: {
+                email: this.email,
+                password: this.password
+              }
+            })
+            .then(res => {
+              const data = res.data;
+              this.$auth.setUser(data.user);
+              this.$auth.setUserToken(
+                data.tokens.access.token,
+                data.tokens.refresh.token
+              );
+              this.$auth.$storage.setUniversal("user", data.user, true);
+              this.$auth.$storage.setUniversal("tokens", data.tokens, true);
+              this.email = null;
+              this.password = null;
+              this.isLoading = false;
+              $(".mfp-close").click();
+              this.$router.push("/dashboard");
+            });
+        } catch (e) {
+          this.error.response.status = true;
+          this.error.response.message = e.response.data.message;
+          this.isLoading = false;
+        }
       }
     },
     validateForm() {

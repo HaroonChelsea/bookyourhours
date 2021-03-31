@@ -35,3 +35,6 @@
     <!-- Spacer / End-->
   </div>
 </template>
+<script>
+export default {};
+</script>

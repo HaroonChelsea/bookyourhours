@@ -42,7 +42,7 @@
         <!-- Left Side Content / End -->
 
         <!-- Right Side Content / End -->
-        <div class="right-side">
+        <div v-if="isLoggedIn" class="right-side">
           <!--  User Notifications -->
           <div class="header-widget hide-on-mobile">
             <!-- Notifications -->
@@ -242,7 +242,6 @@
                       <img src="images/user-avatar-small-01.jpg" alt="" />
                     </div>
                     <div class="user-name">
-                      Name
                       <span>Freelancer</span>
                     </div>
                   </div>
@@ -293,10 +292,7 @@
         <!-- Right Side Content / End -->
 
         <!-- Right Side Content / End -->
-        <div
-          v-if="$route.name !== 'signin' && $route.name !== 'register'"
-          class="right-side"
-        >
+        <div v-else class="right-side">
           <div class="header-widget">
             <a
               ref="signInDialog"
@@ -316,10 +312,18 @@
             </button>
           </span>
         </div>
-        <div v-else></div>
         <!-- Right Side Content / End -->
       </div>
     </div>
     <!-- Header / End -->
   </header>
 </template>
+<script>
+export default {
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    }
+  }
+};
+</script>
