@@ -190,49 +190,32 @@ export default {
     };
   },
   methods: {
-    async userRegister() {
+    userRegister() {
       if (this.validateForm()) {
-        try {
-          this.isLoading = true;
-          await this.$axios.$post(
-            "https://bookyourhours.herokuapp.com/v1/auth/register",
-            {
-              name: this.name,
-              email: this.email,
-              password: this.password,
-              phoneNumber: this.phone
-            }
-          );
-          await this.$auth
-            .loginWith("local", {
-              data: {
-                email: this.email,
-                password: this.password
-              }
-            })
-            .then(res => {
-              const data = res.data;
-              this.$auth.setUser(data.user);
-              this.$auth.setUserToken(
-                data.tokens.access.token,
-                data.tokens.refresh.token
-              );
-              this.$auth.$storage.setUniversal("user", data.user, true);
-              this.$auth.$storage.setUniversal("tokens", data.tokens, true);
-              this.isLoading = false;
-            });
-          this.name = "";
-          this.email = "";
-          this.password = "";
-          this.phone = "";
-          this.isLoading = false;
-          $(".mfp-close").click();
-          this.$router.push("/dashboard");
-        } catch (e) {
-          this.error.response.status = true;
-          this.error.response.message = e.response.data.message;
-          this.isLoading = false;
-        }
+        this.isLoading = true;
+        this.$store
+          .dispatch("registerUser", {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            phoneNumber: this.phone
+          })
+          .then(() => {
+            this.name = "";
+            this.email = "";
+            this.password = "";
+            this.phone = "";
+            this.isLoading = false;
+            $(".mfp-close").click();
+            this.$router.push("/dashboard");
+          })
+          .catch(err => {
+            this.error.response.status = true;
+            this.error.response.message = err.response.data.message
+              ? err.response.data.message
+              : "Something went wrong!";
+            this.isLoading = false;
+          });
       }
     },
     validateForm() {

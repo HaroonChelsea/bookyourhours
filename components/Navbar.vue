@@ -28,7 +28,7 @@
               </li>
 
               <li>
-                <a href="#">Dashboard</a>
+                <NuxtLink to="/dashboard">Dashboard</NuxtLink>
               </li>
 
               <li>
@@ -269,7 +269,7 @@
                     >
                   </li>
                   <li>
-                    <a>
+                    <a href="#" @click="logout">
                       <i class="icon-material-outline-power-settings-new"></i>
                       Logout
                     </a>
@@ -292,7 +292,13 @@
         <!-- Right Side Content / End -->
 
         <!-- Right Side Content / End -->
-        <div v-else class="right-side">
+        <div
+          v-else-if="
+            !isLoggedIn &&
+              !($route.name === 'register' || $route.name === 'signin')
+          "
+          class="right-side"
+        >
           <div class="header-widget">
             <a
               ref="signInDialog"
@@ -313,6 +319,7 @@
           </span>
         </div>
         <!-- Right Side Content / End -->
+        <div v-else></div>
       </div>
     </div>
     <!-- Header / End -->
@@ -323,6 +330,12 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.getters.isAuthenticated;
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.push("/");
     }
   }
 };

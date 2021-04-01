@@ -36,5 +36,7 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  middleware: "logged"
+};
 </script>

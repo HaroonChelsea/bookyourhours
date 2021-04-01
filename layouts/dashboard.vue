@@ -11,5 +11,10 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  middleware: ["check-auth", "auth"],
+  created() {
+    this.$store.dispatch("initAuth");
+  }
+};
 </script>

@@ -97,8 +97,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    "@nuxtjs/axios",
-    "@nuxtjs/auth-next"
+    "@nuxtjs/axios"
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -108,23 +107,8 @@ export default {
   build: {
     standalone: true
   },
-  auth: {
-    strategies: {
-      local: {
-        token: {
-          property: "tokens",
-          required: true,
-          type: "Bearer"
-        },
-        endpoints: {
-          login: {
-            url: "https://bookyourhours.herokuapp.com/v1/auth/login",
-            method: "post"
-          },
-          logout: false,
-          user: false
-        }
-      }
-    }
+  loading: {
+    color: "#2a41e8",
+    height: "2px"
   }
 };

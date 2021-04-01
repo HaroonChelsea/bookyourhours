@@ -1,3 +1,6 @@
 <template>
-  <Header />
+  <div>
+    <Header />
+    <Price />
+  </div>
 </template>
